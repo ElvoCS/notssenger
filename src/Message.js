@@ -6,6 +6,7 @@ function Message({ message, username }) {
   const isUser = username === message.username;
   return (
     <div className={`message ${isUser && "message__user"}`}>
+      //decides who gets blue and who gets grey
       <Card className={isUser ? "message__userCard" : "message__guestCard"}>
         <CardContent>
           <Typography color="white" variant="h5" component="h2" />
