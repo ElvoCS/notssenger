@@ -9,10 +9,7 @@ import FlipMove from "react-flip-move";
 function App() {
   //use state is var in react
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([
-    { username: "Elvo", message: "Wag1 bro" },
-    { username: "Billy", message: "Huurrrrr" },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
@@ -20,7 +17,9 @@ function App() {
     db.collection("messages")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
-        setMessages(snapshot.docs.map((doc) => doc.data()));
+        setMessages(
+          snapshot.docs.map((doc) => ({ id: doc.id, message: doc.data() }))
+        );
       });
   }, []); //only running when page loads
 
@@ -44,9 +43,13 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Notssenger</h1>
+      <img
+        className="app__logo"
+        src="https://i.imgur.com/tjIiT3j.png"
+        alt="notssenger"
+      />
       <h2>Welcome {username}</h2>
-      <form>
+      <form className="app__form">
         <FormControl>
           <InputLabel>Enter a message...</InputLabel>
           <Input
@@ -67,8 +70,8 @@ function App() {
       </form>
 
       <FlipMove>
-        {messages.map((message) => (
-          <Message username={username} message={message} />
+        {messages.map(({ id, message }) => (
+          <Message key={id} username={username} message={message} />
         ))}
       </FlipMove>
     </div>
